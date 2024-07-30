@@ -1,0 +1,10 @@
+services:
+  database:
+    image: postgres:16.3-bullseye
+    container_name: postgres-e2e
+    environment:
+      POSTGRES_PASSWORD: "s2e1_sdawsd"
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql

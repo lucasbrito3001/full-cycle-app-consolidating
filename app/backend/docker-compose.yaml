@@ -1,0 +1,39 @@
+services:
+  database:
+    image: postgres:16.3-bullseye
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: "123ASD123s$)s2e1_sdawsd"
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - fin-plan-network
+
+  app0:
+    container_name: fin-plan-app0
+    build: .
+    command: ['npm', 'run', 'start:dev']
+    environment:
+      PORT: 3000
+      ENV_FILE_PATH: .env.dev
+    volumes:
+      - .:/app
+    ports:
+      - '3000:3000'
+    restart: always
+    healthcheck:
+      test:
+        ['CMD', 'wget -O /dev/null -o /dev/null http://0.0.0.0:3000/healthy']
+      interval: 10s
+      timeout: 2s
+      retries: 3
+    depends_on:
+      - database
+    networks:
+      - fin-plan-network
+
+networks:
+  fin-plan-network:
+    driver: bridge
