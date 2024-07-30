@@ -1,0 +1,1 @@
+# full-cycle-app-consolidating
